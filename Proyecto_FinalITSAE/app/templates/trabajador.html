@@ -1,0 +1,230 @@
+{% extends 'main.html' %}
+{% block contenido %}
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Producto HTML</title>
+
+<!-- Llamando a los estilos y librerias -->
+<link href="static/css/jquery.dataTables.min.css" rel="stylesheet"><!-- Estilo de la tabla -->
+<script src="static/js/jquery.dataTables.min.js"></script> <!-- Para la paginacion -->
+<script src="static/js/bootstrapPager.min.js"></script><!-- para paginacion -->
+
+<!-- auto busqueda -->
+<link href="static/css/jquery-ui.min.css" rel="stylesheet">
+<script src="static/js/jquery-ui.min.js"></script> 
+
+<!--Para que salga el calendario-->
+<link href="static/css/datepicker.css" rel="stylesheet">
+<script src="static/js/bootstrap-datepicker.js"></script>
+
+
+<!--Para Validar los campos -->
+<link href="static/css/jquery.validity.css" rel="stylesheet">
+<script src="static/js/jquery.validity.js"></script>
+
+
+<script type="text/javascript">
+<!--el ja query se debe colcoar siempre $ y numerar para llamar al id -->
+$(function(){
+	$('#btncrear').click(function(){<!--  -->
+		$('#PanelInsertartTrabajador').show(); <!--  -->
+		$('#btncrear').hide(); <!-- para ocultar el boton-->
+	}); 
+	
+	$('#btncancelar').click(function(){<!--  -->
+		$('#PanelInsertartTrabajador').hide();<!--  -->
+		$('#btncrear').show(); <!-- para ocultar el boton-->
+	});
+	
+	$('#btneliminar').click(function(){<!--  -->
+		$('#PanelInsertartTrabajador').show();<!--   -->
+	});
+	
+	$('#fecha_Ingreso').datepicker({
+		      format:"yyyy-mm-dd"
+	});
+	
+	$('#formT').validity(function(){
+		$('#nombre')
+		 .require();
+		
+		$('#apaterno')
+		 .require();
+		
+		$('#amaterno')
+		 .require();
+		
+		$('#Cedula')
+		.require()
+		.match("number");
+		
+		 $('#celular')
+		 .require()
+		 .match("number");
+		
+		});
+	
+	$('#PanelInsertartTrabajador').validity("input:text, textarea:textarea, select");
+	
+});
+</script>
+</head>
+<body>
+
+
+	<div id="PanelInsertartTrabajador" style="display: none;"> <!-- no va a mostrar el panel esta oculto -->
+		<div class="panel panel-primary"><!-- todo class es tomado desde el bootstrap -->
+			<div class="panel-heading">
+				<h3 class="panel-title">Formulario de Registro de Productos</h3> <!--Nombre del registro -->
+
+			</div>
+			<div class="panel-body">
+			<div id="formAdd" aling="center">
+			<form action="/addTrabajador" method="post" id="formT" name="formT" 
+			class="form-horizontal" role="form"> <!--estilos-->
+			
+			<div class="form-group">
+			<label for="usuario" class="col-sm-2 control-label">Usuario:</label> <!-- class propio del bootstrap -->
+			<div class="col-sm-10"> <!--los classs es para que pueda reenderizarse a la pantalla que vayamos a usar -->
+			<input type="text" id="usuario" name="usuario" class="form-control" required="" placeholder="Campo de texto usuario">
+			</div> 
+			</div>
+			
+			<div class="form-group">
+			<label for="clave" class="col-sm-2 control-label">Clave:</label> <!-- class propio del bootstrap -->
+			<div class="col-sm-10"> <!--los classs es para que pueda reenderizarse a la pantalla que vayamos a usar -->
+			<input type="text" id="clave" name="clave" class="form-control" required="">
+			</div> 
+			</div>
+			
+			<div class="form-group">
+			<label  for="estado" class="col-sm-2 control-label">Estado:</label> <!-- class propio del bootstrap -->
+			<div class="col-sm-10"> <!--los classs es para que pueda reenderizarse a la pantalla que vayamos a usar -->
+				<select name="estado" class="form-control">
+					<option  value="1">Activo</option>
+					<option value="0">Inactivo</option>
+				</select>
+			</div> 
+			</div>
+			
+			<div class="form-group">
+			<label for="fecha_nacimiento" class="col-sm-2 control-label">Fecha Ingreso:</label> <!-- class propio del bootstrap -->
+			<div class="col-sm-10"> <!--los classs es para que pueda reenderizarse a la pantalla que vayamos a usar -->
+			<input type="text" id="fecha_Ingreso" name="fecha_Ingreso" class="form-control">
+			</div> 
+			</div>
+			
+			<div class="form-group">
+			<label  for="estado" class="col-sm-2 control-label">Id Trabajador:</label> <!-- class propio del bootstrap -->
+			<div class="col-sm-10"> <!--los classs es para que pueda reenderizarse a la pantalla que vayamos a usar -->
+				<select name="tipoid" class="form-control">
+					<option  value="1">Administrador</option>
+					<option value="2">Docente</option>
+					<option value="3">Estudiante</option>
+				</select>
+			</div> 
+			</div>
+
+			<div class="form-group">
+			<div class="col-sm-10">
+				<h4 align="center">
+				<input type="submit"  name="btnEnviar"  class="btn btn-success" value="Registrar"> 
+				<input type="reset" name="btnLimpiar" class="btn btn-info" value="Limpiar">
+				<input type="button" name="btnCancelar" id="btncancelar" class="btn btn-warning" value="Cancelar">
+				</h4>
+			</div> 
+			</div>
+			
+			</form>
+
+			</div>
+			</div>
+		</div>
+	</div>
+	<br>
+
+	<div id="divformS" align="center">
+	<form action="/buscardatoT" id="formb" class="form-inline" role="formb">
+		<div class="form-group">
+			<label for="bnombre" class="col-sm-2 control-label">Buscar Trabajador:</label>   <!-- class propio del bootstrap -->
+			<div class="col-sm-10">                                                      <!--los classs es para que pueda reenderizarse a la pantalla que vayamos a usar -->
+				<input type="text" id="bnombre" name="bnombre" class="form-control">
+				<input type="submit"  name="btnbuscar"  class="btn btn-primary" value="Buscar" id="btnbuscar"> 
+				 <a type="button" id="btncrear" class="btn btn-success" value="Crear" id="btnagregar"  class="btn btn-principal">Ingresar Usuario <img src="static/img/btnAdd.png"> </a>     <!-- class es par ael estilo -->
+			</div> 
+		</div>
+	</form>
+	</div>
+	
+	
+	<div class="table-responsive" id="divtableitsaeT">	
+	<table class="table" id="tableItsaeT">                                         <!-- para poder lalmar luego con el id -->
+		<thead> 
+		<tr>
+			<th>Usuario</th>
+			<th>Clave</th>
+			<th>Estado</th>
+			<th>Fecha de Acceso</th>
+			<th>Tipo Trabajador</th>
+			<th>Editar</th>
+			<th>Eliminar</th>
+			<th>Estado Ingreso</th>
+		</tr>
+		</thead>	
+		<tbody>	
+		{% for d in data %}
+		<tr>
+			<td>{{d[1]}}</td>
+			<td>{{d[2]}}</td>
+			<td>{{d[3]}}</td>
+			<td>{{d[4]}}</td>
+			<td>{{d[5]}}</td>
+			<td>
+			<a id="btnmodificar" class="btn btn-info" href="/editardato?idpersona={{d[0]}}"> <img src="static/img/modificar.png" > </a>
+			</td>
+			<td>
+			<a id="btneliminar"  class="btn btn-danger" href="/eliminardato?idpersona={{d[0]}}"> <img src="static/img/eliminar.png"> </a>
+			</td>
+			<td>
+			<a id="btnagregar"  class="btn btn-principal" onmouseDown="alert('ESTE USUARIO YA ESTA INGRESADO')"> <img src="static/img/celphone.png"> </a>
+			
+			</td>
+		</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+	</div>
+	
+	
+<script type="text/javascript">
+	$('#tableItsaeT').DataTable({ <!--es para llamar a id de la tabla-->
+		paginType:"bootstrapPager", 
+		pagerSettings:{ searchOnEnter:true, <!--para buscar-->
+			language: "Pagina ~ of paginas" 
+			}
+	}
+	);
+</script>
+
+<script type="text/javascript">
+	$('#bnombre').autocomplete({ <!--es para llamar a id de la tabla-->
+		source:"/buscarautopt", <!--Para enviar la url y llamar al url-->
+		minLength:2
+	});
+
+
+</script>
+
+<h4 align="center">
+	<img src="static/Logo/cade.jpg" alt="Propiedad de PEDRO.ABAD" width="100" height="100" />
+</h4>
+
+</body>
+
+
+
+{% endblock %}
+
+
+
